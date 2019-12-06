@@ -14,4 +14,7 @@ categories = ["wasm"]
 crate-type = ["cdylib"]
 
 [dependencies]
-wasmer-runtime-c-api =  { git = "https://github.com/confio/wasmer", branch = "metering", features = ["metering"] }
+wasmer-runtime-c-api =  { git = "https://github.com/AdamSLevy/wasmer", branch = "custom", features = ["llvm-backend", "metering", "wasi"], default-features = false }
+
+[patch.crates-io]
+wasmparser =  { git = "https://github.com/AdamSLevy/wasmparser", branch = "OperatorClonev0.39.3" }
