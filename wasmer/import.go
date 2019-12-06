@@ -348,3 +348,19 @@ func (instanceContext *InstanceContext) Data() interface{} {
 
 	return instancesContextData[contextDataIndex]
 }
+
+func (instanceContext *InstanceContext) GetExecLimit() uint64 {
+	return cWasmerInstanceContextGetExecutionLimit(instanceContext.context)
+}
+
+func (instanceContext *InstanceContext) SetExecLimit(limit uint64) {
+	cWasmerInstanceContextSetExecutionLimit(instanceContext.context, limit)
+}
+
+func (instanceContext *InstanceContext) GetPointsUsed() uint64 {
+	return cWasmerInstanceContextGetPointsUsed(instanceContext.context)
+}
+
+func (instanceContext *InstanceContext) SetPointsUsed(points uint64) {
+	cWasmerInstanceContextSetPointsUsed(instanceContext.context, points)
+}

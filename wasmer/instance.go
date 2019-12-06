@@ -467,6 +467,14 @@ func (instance *Instance) Close() {
 	}
 }
 
+func (instance *Instance) GetExecLimit() uint64 {
+	return cWasmerInstanceGetExecutionLimit(instance.instance)
+}
+
+func (instance *Instance) SetExecLimit(limit uint64) {
+	cWasmerInstanceSetExecutionLimit(instance.instance, limit)
+}
+
 func (instance *Instance) GetPointsUsed() uint64 {
 	return cWasmerInstanceGetPointsUsed(instance.instance)
 }

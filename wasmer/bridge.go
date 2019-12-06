@@ -192,7 +192,8 @@ func cWasmerImportObjectGetFunctions(importObject *cWasmerImportObjectT) []cWasm
 	return imports
 }
 
-func cWasmerCompile(module **cWasmerModuleT, wasmBytes *cUchar, wasmBytesLength cUint) cWasmerResultT {
+func cWasmerCompile(module **cWasmerModuleT,
+	wasmBytes *cUchar, wasmBytesLength cUint) cWasmerResultT {
 	return (cWasmerResultT)(C.wasmer_compile(
 		(**C.wasmer_module_t)(unsafe.Pointer(module)),
 		(*C.uchar)(wasmBytes),
@@ -200,15 +201,40 @@ func cWasmerCompile(module **cWasmerModuleT, wasmBytes *cUchar, wasmBytesLength 
 	))
 }
 
-
-// TODO: is this an auto-gen file? how should I create this?
-func cWasmerCompileWithLimit(module **cWasmerModuleT, wasmBytes *cUchar, wasmBytesLength cUint, gasLimit uint64) cWasmerResultT {
-	return (cWasmerResultT)(C.wasmer_compile_with_limit(
+func cWasmerCompileWithGasMetering(module **cWasmerModuleT,
+	wasmBytes *cUchar, wasmBytesLength cUint) cWasmerResultT {
+	return (cWasmerResultT)(C.wasmer_compile_with_gas_metering(
 		(**C.wasmer_module_t)(unsafe.Pointer(module)),
 		(*C.uchar)(wasmBytes),
 		(C.uint)(wasmBytesLength),
-		(C.uint64_t)(gasLimit),
 	))
+}
+
+func cWasmerInstanceGetExecutionLimit(instance *cWasmerInstanceT) uint64 {
+	return uint64(C.wasmer_instance_get_execution_limit(
+		(*C.wasmer_instance_t)(instance),
+	))
+}
+
+func cWasmerInstanceSetExecutionLimit(instance *cWasmerInstanceT, limit uint64) {
+	C.wasmer_instance_set_execution_limit(
+		(*C.wasmer_instance_t)(instance),
+		(C.uint64_t)(limit),
+	)
+}
+
+func cWasmerInstanceContextGetExecutionLimit(ctx *cWasmerInstanceContextT) uint64 {
+	return uint64(C.wasmer_instance_context_get_execution_limit(
+		(*C.wasmer_instance_context_t)(ctx),
+	))
+}
+
+func cWasmerInstanceContextSetExecutionLimit(
+	ctx *cWasmerInstanceContextT, limit uint64) {
+	C.wasmer_instance_context_set_execution_limit(
+		(*C.wasmer_instance_context_t)(ctx),
+		(C.uint64_t)(limit),
+	)
 }
 
 func cWasmerInstanceGetPointsUsed(instance *cWasmerInstanceT) uint64 {
@@ -223,7 +249,19 @@ func cWasmerInstanceSetPointsUsed(instance *cWasmerInstanceT, points uint64) {
 		(C.uint64_t)(points),
 	)
 }
-// End TODO: autogen?
+
+func cWasmerInstanceContextGetPointsUsed(ctx *cWasmerInstanceContextT) uint64 {
+	return uint64(C.wasmer_instance_context_get_points_used(
+		(*C.wasmer_instance_context_t)(ctx),
+	))
+}
+
+func cWasmerInstanceContextSetPointsUsed(ctx *cWasmerInstanceContextT, points uint64) {
+	C.wasmer_instance_context_set_points_used(
+		(*C.wasmer_instance_context_t)(ctx),
+		(C.uint64_t)(points),
+	)
+}
 
 func cWasmerExportDescriptorKind(exportDescriptor *cWasmerExportDescriptorT) cWasmerImportExportKind {
 	return (cWasmerImportExportKind)(C.wasmer_export_descriptor_kind(
